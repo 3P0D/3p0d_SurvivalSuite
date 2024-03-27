@@ -10,6 +10,7 @@ a Blender addon to make my life easier.
 - Clear all transforms.
 ##### Geometry: 
 - fix all normals (while in object mode).
+- set origin to selected (in edit mode).
 ##### Parents: 
 - make singler user-data (break the link of instances).
 
