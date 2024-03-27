@@ -41,7 +41,7 @@ class LAZYSUITE_PT_panelA(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "3P0D's Survival Suite"
     bl_parent_id = "LAZYSUITE_PT_main_panel"
-    bl_options = {"DEFAULT_CLOSED"}
+#    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         layout = self.layout
@@ -58,6 +58,8 @@ class LAZYSUITE_PT_panelA(bpy.types.Panel):
         row = layout.row()
         row.operator("lazysuite.fixnormals", icon='ORIENTATION_NORMAL')
         row = layout.row()
+        row.operator("lazysuite.origintoselect", icon='PIVOT_CURSOR')
+        row = layout.row()
         row.label(text="Parents:")
         row = layout.row()
         row.operator("lazysuite.makesingle", icon='HEART')
@@ -71,7 +73,7 @@ class LAZYSUITE_PT_panelB(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "3P0D's Survival Suite"
     bl_parent_id = "LAZYSUITE_PT_main_panel"
-    bl_options = {"DEFAULT_CLOSED"}
+#    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         layout = self.layout
@@ -101,7 +103,7 @@ class LAZYSUITE_PT_panelC(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "3P0D's Survival Suite"
     bl_parent_id = "LAZYSUITE_PT_main_panel"
-    bl_options = {"DEFAULT_CLOSED"}
+#    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         layout = self.layout
@@ -183,6 +185,17 @@ class LAZYSUITE_OT_fixnormals(bpy.types.Operator):
         bpy.ops.mesh.normals_make_consistent(inside=False)
         bpy.ops.object.editmode_toggle()
         return {'FINISHED'}
+
+class LAZYSUITE_OT_origintoselect(bpy.types.Operator):
+    
+    bl_label = "Set Origin to selected"
+    bl_idname = "lazysuite.origintoselect"
+    def execute(self, context):
+        bpy.ops.view3d.snap_cursor_to_selected()
+        bpy.ops.object.editmode_toggle()
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
+        return {'FINISHED'}
+    
     
 class LAZYSUITE_OT_makesingle(bpy.types.Operator):
     
@@ -413,7 +426,7 @@ class LAZYSUITE_OT_applyname_empty(bpy.types.Operator):
     
 # -------------------------------------------------------------------------------------
     
-classes = [LAZYSUITE_PT_main_panel, LAZYSUITE_PT_panelA, LAZYSUITE_PT_panelB, LAZYSUITE_PT_panelC, LAZYSUITE_PT_panelD, LAZYSUITE_OT_applyrotation_rig, LAZYSUITE_OT_applytransform, LAZYSUITE_OT_cleartransform, LAZYSUITE_OT_fixnormals, LAZYSUITE_OT_makesingle, LAZYSUITE_OT_createempty, LAZYSUITE_OT_createsuzanne, LAZYSUITE_OT_addmodifier_mirror, LAZYSUITE_OT_addmodifier_bevel, LAZYSUITE_OT_addmodifier_shrinkwrap, LAZYSUITE_OT_addchecker_512, LAZYSUITE_OT_addchecker_1024, LAZYSUITE_OT_addchecker_2048, LAZYSUITE_OT_addchecker_4096, LAZYSUITE_OT_applyname_mesh, LAZYSUITE_OT_applyname_geo, LAZYSUITE_OT_applyname_rig, LAZYSUITE_OT_applyname_empty]
+classes = [LAZYSUITE_PT_main_panel, LAZYSUITE_PT_panelA, LAZYSUITE_PT_panelB, LAZYSUITE_PT_panelC, LAZYSUITE_PT_panelD, LAZYSUITE_OT_applyrotation_rig, LAZYSUITE_OT_applytransform, LAZYSUITE_OT_cleartransform, LAZYSUITE_OT_fixnormals, LAZYSUITE_OT_origintoselect, LAZYSUITE_OT_makesingle, LAZYSUITE_OT_createempty, LAZYSUITE_OT_createsuzanne, LAZYSUITE_OT_addmodifier_mirror, LAZYSUITE_OT_addmodifier_bevel, LAZYSUITE_OT_addmodifier_shrinkwrap, LAZYSUITE_OT_addchecker_512, LAZYSUITE_OT_addchecker_1024, LAZYSUITE_OT_addchecker_2048, LAZYSUITE_OT_addchecker_4096, LAZYSUITE_OT_applyname_mesh, LAZYSUITE_OT_applyname_geo, LAZYSUITE_OT_applyname_rig, LAZYSUITE_OT_applyname_empty]
 
 def register():
     for cls in classes:
