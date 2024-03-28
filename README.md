@@ -1,4 +1,4 @@
-# 3POD'S SURVIVAL SUITE
+# 3P0D'S SURVIVAL SUITE
 a Blender addon to make my life easier.  
 it's shared "as is" and I cannot guarantee everything will be working.  
 install the python file directly in the addon menu.
