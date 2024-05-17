@@ -48,16 +48,14 @@ class LAZYSUITE_PT_panelA(bpy.types.Panel):
         row = layout.row()
         row.label(text="Transforms:")
         row = layout.row()
-        row.operator("lazysuite.applyrotation_rig", icon = 'TRACKING_REFINE_FORWARDS')
-        row = layout.row()
         row.operator("lazysuite.applytransform", icon = 'CURVE_NCIRCLE')
-        row = layout.row()
         row.operator("lazysuite.cleartransform", icon='TRASH')
+        row = layout.row()
+        row.operator("lazysuite.applyrotation_rig", icon = 'TRACKING_REFINE_FORWARDS')
         row = layout.row()
         row.label(text="Geometry:")
         row = layout.row()
         row.operator("lazysuite.fixnormals", icon='ORIENTATION_NORMAL')
-        row = layout.row()
         row.operator("lazysuite.origintoselect", icon='PIVOT_CURSOR')
         row = layout.row()
         row.label(text="Parents:")
@@ -81,7 +79,6 @@ class LAZYSUITE_PT_panelB(bpy.types.Panel):
         row.label(text="Add objects:")
         row = layout.row()
         row.operator("lazysuite.createempty", icon='EMPTY_AXIS')
-        row = layout.row()
         row.operator("lazysuite.createsuzanne", icon='MONKEY')
         row = layout.row()
         row.separator()
@@ -89,7 +86,6 @@ class LAZYSUITE_PT_panelB(bpy.types.Panel):
         row.label(text="Add modifiers:")
         row = layout.row()
         row.operator("lazysuite.addmodifier_mirror", icon='MOD_MIRROR')
-        row = layout.row()
         row.operator("lazysuite.addmodifier_bevel", icon='MOD_BEVEL')
         row = layout.row()
         row.operator("lazysuite.addmodifier_shrinkwrap", icon='MOD_SHRINKWRAP')
@@ -142,8 +138,9 @@ class LAZYSUITE_PT_panelD(bpy.types.Panel):
 
 class LAZYSUITE_OT_applyrotation_rig(bpy.types.Operator):
     
-    bl_label = "Apply -90 Rotation (Rig)"
+    bl_label = "Apply -90° (Rig)"
     bl_idname = "lazysuite.applyrotation_rig"
+    bl_description = "Apply a -90° rotation on a rig to prepare it for export in Unity"
     def execute(self, context):
         if bpy.context.object.rotation_euler[0] != -1.570796:
             bpy.context.object.rotation_euler[0] = 0
@@ -158,8 +155,9 @@ class LAZYSUITE_OT_applyrotation_rig(bpy.types.Operator):
     
 class LAZYSUITE_OT_applytransform(bpy.types.Operator):
     
-    bl_label = "Apply all (Transforms)"
+    bl_label = "Apply all"
     bl_idname = "lazysuite.applytransform"
+    bl_description = "Apply all the transform of an object: location, rotation, scale"
     def execute(self, context):
         bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
         return {'FINISHED'}
@@ -167,8 +165,9 @@ class LAZYSUITE_OT_applytransform(bpy.types.Operator):
     
 class LAZYSUITE_OT_cleartransform(bpy.types.Operator):
     
-    bl_label = "Clear all (Transforms)"
+    bl_label = "Clear all"
     bl_idname = "lazysuite.cleartransform"
+    bl_description = "Clear all the transform of an object: location, rotation, scale"
     def execute(self, context):
         bpy.ops.object.location_clear(clear_delta=False)
         bpy.ops.object.rotation_clear(clear_delta=False)
@@ -179,6 +178,7 @@ class LAZYSUITE_OT_fixnormals(bpy.types.Operator):
     
     bl_label = "Fix normals (Obj.Mode)"
     bl_idname = "lazysuite.fixnormals"
+    bl_description = "Fix the inverted normals of an object instantly, in Object Mode"
     def execute(self, context):
         bpy.ops.object.editmode_toggle()
         bpy.ops.mesh.select_all(action='SELECT')
@@ -188,8 +188,9 @@ class LAZYSUITE_OT_fixnormals(bpy.types.Operator):
 
 class LAZYSUITE_OT_origintoselect(bpy.types.Operator):
     
-    bl_label = "Set Origin to selected"
+    bl_label = "Origin to selected"
     bl_idname = "lazysuite.origintoselect"
+    bl_description = "Move the origin of the object to the selected vertex, edge, or face, in Edit Mode"
     def execute(self, context):
         bpy.ops.view3d.snap_cursor_to_selected()
         bpy.ops.object.editmode_toggle()
@@ -201,6 +202,7 @@ class LAZYSUITE_OT_makesingle(bpy.types.Operator):
     
     bl_label = "Make single (Userdata)"
     bl_idname = "lazysuite.makesingle"
+    bl_description = "Break the bonds between the selected objects and their datas, making them all unique users"
     def execute(self, context):
         bpy.ops.object.make_single_user(object=True, obdata=True, material=False, animation=False, obdata_animation=False)
 
@@ -210,8 +212,9 @@ class LAZYSUITE_OT_makesingle(bpy.types.Operator):
 
 class LAZYSUITE_OT_createempty(bpy.types.Operator):
     
-    bl_label = "Create Empty (0,0,0)"
+    bl_label = "Empty (0,0,0)"
     bl_idname = "lazysuite.createempty"
+    bl_description = "Create a EMPTY object in 0.0.0 location"
     def execute(self, context):
         bpy.ops.object.empty_add(type='PLAIN_AXES', align='WORLD', location=(0, 0, 0), scale=(1, 1, 1))
         bpy.context.object.name = "_EMPTY"
@@ -219,8 +222,9 @@ class LAZYSUITE_OT_createempty(bpy.types.Operator):
 
 class LAZYSUITE_OT_createsuzanne(bpy.types.Operator):
     
-    bl_label = "Create Suzanne (0,0,0)"
+    bl_label = "Suzanne (0,0,0)"
     bl_idname = "lazysuite.createsuzanne"
+    bl_description = "Create a SUZANNE object in 0.0.0 location"
     def execute(self, context):
         bpy.ops.mesh.primitive_monkey_add(enter_editmode=False, align='WORLD', location=(0, 0, 0), scale=(1, 1, 1))
         return {'FINISHED'}
@@ -229,6 +233,7 @@ class LAZYSUITE_OT_addmodifier_mirror(bpy.types.Operator):
     
     bl_label = "Mirror (X + Clipping)"
     bl_idname = "lazysuite.addmodifier_mirror"
+    bl_description = "Add a MIRROR modifier on the X axis, with clipping toggled on"
     def execute(self, context):
         bpy.ops.object.modifier_add(type='MIRROR')
         bpy.context.object.modifiers["Mirror"].use_clip = True
@@ -240,6 +245,7 @@ class LAZYSUITE_OT_addmodifier_bevel(bpy.types.Operator):
     
     bl_label = "Bevel (Weight)"
     bl_idname = "lazysuite.addmodifier_bevel"
+    bl_description = "Add a BEVEL modifier with the weight option toggled on"
     def execute(self, context):
         bpy.ops.object.modifier_add(type='BEVEL')
         bpy.context.object.modifiers["Bevel"].limit_method = 'WEIGHT'
@@ -248,6 +254,7 @@ class LAZYSUITE_OT_addmodifier_bevel(bpy.types.Operator):
 class LAZYSUITE_OT_addmodifier_shrinkwrap(bpy.types.Operator):
     bl_label = "Shrinkwrap (Select.)"
     bl_idname = "lazysuite.addmodifier_shrinkwrap"
+    bl_description = "Add a SHRINKWARP modifier on the ACTIVE object with the PASSIVE selected object as a target, with a DISPLACEMENT modifier"
     def execute(self, context):
         bpy.ops.object.modifier_add(type='SHRINKWRAP')
         bpy.context.object.modifiers["Shrinkwrap"].target = bpy.context.selected_objects[0]
