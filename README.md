@@ -1,5 +1,5 @@
 # 3P0D'S SURVIVAL SUITE
-a Blender addon to make my life easier.  
+Blender addon to make my life easier.  
 it's shared "as is" and I cannot guarantee everything will be working.  
 install the python file directly in the addon menu.
 
@@ -15,6 +15,7 @@ install the python file directly in the addon menu.
 - set origin to selected (in edit mode).
 ##### PARENTS: 
 - make singler user-data (break the link of instances).
+- clear parents (and keep transforms).
 
 ### ADD MODIFIERS AND OBJECTS:
 ##### ADD OBJECTS:
@@ -24,15 +25,20 @@ install the python file directly in the addon menu.
 - add a mirror (in X axis, with clipping and on cage options activated).
 - add a bevel (with 'weight' limit method option activated).
 - add a shrinkwrap + displ. (take the selected object as a target).
+- apply transforms + modifiers, join meshes, and add a remesh modifier (following the value in the property box).
 
 ### ADD TEXTURES AND MATERIALS:
 ##### ADD CHECKER TEXTURE:
 - 512, 1024, 2048, 4096.  
 (all un-used textures and materials are cleared when reusing this option.)
 
-### SET OBJECT NAMES:
-##### SET PREFIX:
-- 3D_  
+### SET OBJECT NAMES:  
+you can now customise your naming convention. those are default value.  
+it will skip the renaming action if you already had set a prefix.
+##### SET PREFIX: 
 - GEO_  
 - RIG_  
 - EMPT_  
+- CURV_
+- BOOL_  
+
