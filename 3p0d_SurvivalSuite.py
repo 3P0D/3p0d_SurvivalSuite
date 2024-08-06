@@ -61,9 +61,7 @@ class LAZYSUITE_PT_panelA(bpy.types.Panel):
         row.label(text="Parents:")
         row = layout.row()
         row.operator("lazysuite.makesingle", icon='ORPHAN_DATA')
-        row = layout.row()
         row.operator("lazysuite.clearparents", icon='GHOST_DISABLED')
-        row = layout.row()
         
 class LAZYSUITE_PT_panelB(bpy.types.Panel):
     
@@ -105,7 +103,7 @@ class LAZYSUITE_PT_panelC(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "3P0D's Survival Suite"
     bl_parent_id = "LAZYSUITE_PT_main_panel"
-#    bl_options = {"DEFAULT_CLOSED"}
+    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         layout = self.layout
