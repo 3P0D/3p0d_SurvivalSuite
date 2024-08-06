@@ -32,11 +32,13 @@ install the python file directly in the addon menu.
 - 512, 1024, 2048, 4096.  
 (all un-used textures and materials are cleared when reusing this option.)
 
-### SET OBJECT NAMES:
+### SET OBJECT NAMES:  
+you can now customise your naming convention. those are default value.  
+it will skip the renaming action if you already had set a prefix.
 ##### SET PREFIX: 
 - GEO_  
 - RIG_  
 - EMPT_  
 - CURV_
 - BOOL_  
-you can now customise your naming convention. those are default value.
+
