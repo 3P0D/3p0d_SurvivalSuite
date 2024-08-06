@@ -120,18 +120,43 @@ class LAZYSUITE_PT_panelD(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "3P0D's Survival Suite"
     bl_parent_id = "LAZYSUITE_PT_main_panel"
-    bl_options = {"DEFAULT_CLOSED"}
+#    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         layout = self.layout
+        
         row = layout.row()
         row.label(text="Set prefix:")
+       
         row = layout.row()
-        row.operator("lazysuite.applyname_mesh")
+        sub = row.row()
+        sub.scale_x = 1.5
+        sub.prop(context.scene, 'newName_geo')
         row.operator("lazysuite.applyname_geo")
+       
         row = layout.row()
+        sub = row.row()
+        sub.scale_x = 1.5
+        sub.prop(context.scene, 'newName_rig')
         row.operator("lazysuite.applyname_rig")
+        
+        row = layout.row()
+        sub = row.row()
+        sub.scale_x = 1.5
+        sub.prop(context.scene, 'newName_empty')
         row.operator("lazysuite.applyname_empty")
+        
+        row = layout.row()
+        sub = row.row()
+        sub.scale_x = 1.5
+        sub.prop(context.scene, 'newName_curve')
+        row.operator("lazysuite.applyname_curve")
+    
+        row = layout.row()
+        sub = row.row()
+        sub.scale_x = 1.5
+        sub.prop(context.scene, 'newName_bool')
+        row.operator("lazysuite.applyname_bool")
     
         
 # --------------------------------------------------------------------------------
@@ -373,72 +398,92 @@ class LAZYSUITE_OT_addchecker_4096(bpy.types.Operator):
 
 # --------------------------------------------------------------------------------
 
-class LAZYSUITE_OT_applyname_mesh(bpy.types.Operator):
-    
-    bl_label = "3d_"
-    bl_idname = "lazysuite.applyname_mesh"
-    def execute(self, context):
-        sel_obj = bpy.context.selected_objects
-        for i, val in enumerate(sel_obj):
-            obj_name = str(sel_obj[i].name)
-            if obj_name[:3] != "3d_":
-                sel_obj[i].name = str("3d_" + sel_obj[i].name)
-            else:
-                pass
-        return {'FINISHED'}
-
 class LAZYSUITE_OT_applyname_geo(bpy.types.Operator):
     
-    bl_label = "GEO_"
+    bl_label = "Mesh"
     bl_idname = "lazysuite.applyname_geo"
     def execute(self, context):
-        sel_obj = bpy.context.selected_objects
-        for i, val in enumerate(sel_obj):
-            obj_name = str(sel_obj[i].name)
-            if obj_name[:4] != "GEO_":
-                sel_obj[i].name = str("GEO_" + sel_obj[i].name)
-            else:
-                pass
+        scene = context.scene
+        if bpy.context.object.type == 'MESH':
+            cur_name = str(bpy.context.object.name)
+            if cur_name[:len(str(scene.newName_geo))] != scene.newName_geo:
+                bpy.context.object.name = str(scene.newName_geo + bpy.context.object.name)
+        else:
+            pass
         return {'FINISHED'}
     
 class LAZYSUITE_OT_applyname_rig(bpy.types.Operator):
     
-    bl_label = "RIG_"
+    bl_label = "Rig"
     bl_idname = "lazysuite.applyname_rig"
 
     def execute(self, context):
-        sel_obj = bpy.context.selected_objects
-        for i, val in enumerate(sel_obj):
-            obj_name = str(sel_obj[i].name)
-            if obj_name[:4] != "RIG_":
-                sel_obj[i].name = str("RIG_" + sel_obj[i].name)
-            else:
-                pass
+        scene = context.scene
+        if bpy.context.object.type == 'ARMATURE':
+            cur_name = str(bpy.context.object.name)
+            if cur_name[:len(str(scene.newName_rig))] != scene.newName_rig:
+                bpy.context.object.name = str(scene.newName_rig + bpy.context.object.name)
+        else:
+            pass
         return {'FINISHED'}
 
 class LAZYSUITE_OT_applyname_empty(bpy.types.Operator):
     
-    bl_label = "EMPT_"
+    bl_label = "Empty"
     bl_idname = "lazysuite.applyname_empty"
 
     def execute(self, context):
-        sel_obj = bpy.context.selected_objects
-        for i, val in enumerate(sel_obj):
-            obj_name = str(sel_obj[i].name)
-            if obj_name[:5] != "EMPT_":
-                sel_obj[i].name = str("EMPT_" + sel_obj[i].name)
-            else:
-                pass
+        scene = context.scene
+        if bpy.context.object.type == 'EMPTY':
+            cur_name = str(bpy.context.object.name)
+            if cur_name[:len(str(scene.newName_empty))] != scene.newName_empty:
+                bpy.context.object.name = str(scene.newName_empty + bpy.context.object.name)
+        else:
+            pass
+        return {'FINISHED'}
+
+class LAZYSUITE_OT_applyname_curve(bpy.types.Operator):
+    
+    bl_label = "Curve"
+    bl_idname = "lazysuite.applyname_curve"
+
+    def execute(self, context):
+        scene = context.scene
+        if bpy.context.object.type == 'CURVE':
+            cur_name = str(bpy.context.object.name)
+            if cur_name[:len(str(scene.newName_curve))] != scene.newName_curve:
+                bpy.context.object.name = str(scene.newName_curve + bpy.context.object.name)
+        else:
+            pass
+        return {'FINISHED'}
+
+class LAZYSUITE_OT_applyname_bool(bpy.types.Operator):
+    
+    bl_label = "Bool"
+    bl_idname = "lazysuite.applyname_bool"
+
+    def execute(self, context):
+        scene = context.scene
+        if bpy.context.object.type == 'MESH':
+            cur_name = str(bpy.context.object.name)
+            if cur_name[:len(str(scene.newName_bool))] != scene.newName_bool:
+                bpy.context.object.name = str(scene.newName_bool + bpy.context.object.name)
+        else:
+            pass
         return {'FINISHED'}
     
 # -------------------------------------------------------------------------------------
     
-classes = [LAZYSUITE_PT_main_panel, LAZYSUITE_PT_panelA, LAZYSUITE_PT_panelB, LAZYSUITE_PT_panelC, LAZYSUITE_PT_panelD, LAZYSUITE_OT_applyrotation_rig, LAZYSUITE_OT_applytransform, LAZYSUITE_OT_cleartransform, LAZYSUITE_OT_fixnormals, LAZYSUITE_OT_origintoselect, LAZYSUITE_OT_makesingle, LAZYSUITE_OT_createempty, LAZYSUITE_OT_createsuzanne, LAZYSUITE_OT_addmodifier_mirror, LAZYSUITE_OT_addmodifier_bevel, LAZYSUITE_OT_addmodifier_shrinkwrap, LAZYSUITE_OT_addchecker_512, LAZYSUITE_OT_addchecker_1024, LAZYSUITE_OT_addchecker_2048, LAZYSUITE_OT_addchecker_4096, LAZYSUITE_OT_applyname_mesh, LAZYSUITE_OT_applyname_geo, LAZYSUITE_OT_applyname_rig, LAZYSUITE_OT_applyname_empty]
+classes = [LAZYSUITE_PT_main_panel, LAZYSUITE_PT_panelA, LAZYSUITE_PT_panelB, LAZYSUITE_PT_panelC, LAZYSUITE_PT_panelD, LAZYSUITE_OT_applyrotation_rig, LAZYSUITE_OT_applytransform, LAZYSUITE_OT_cleartransform, LAZYSUITE_OT_fixnormals, LAZYSUITE_OT_origintoselect, LAZYSUITE_OT_makesingle, LAZYSUITE_OT_createempty, LAZYSUITE_OT_createsuzanne, LAZYSUITE_OT_addmodifier_mirror, LAZYSUITE_OT_addmodifier_bevel, LAZYSUITE_OT_addmodifier_shrinkwrap, LAZYSUITE_OT_addchecker_512, LAZYSUITE_OT_addchecker_1024, LAZYSUITE_OT_addchecker_2048, LAZYSUITE_OT_addchecker_4096, LAZYSUITE_OT_applyname_geo, LAZYSUITE_OT_applyname_rig, LAZYSUITE_OT_applyname_empty, LAZYSUITE_OT_applyname_curve, LAZYSUITE_OT_applyname_bool]
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-
+    bpy.types.Scene.newName_geo = bpy.props.StringProperty(name='', default="GEO_")
+    bpy.types.Scene.newName_rig = bpy.props.StringProperty(name='', default="RIG_")
+    bpy.types.Scene.newName_empty = bpy.props.StringProperty(name='', default="EMPT_")
+    bpy.types.Scene.newName_curve = bpy.props.StringProperty(name='', default="CURV_")
+    bpy.types.Scene.newName_bool = bpy.props.StringProperty(name='', default="BOOL_")
 
 def unregister():
     for cls in classes:
