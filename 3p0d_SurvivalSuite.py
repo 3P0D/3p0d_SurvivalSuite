@@ -60,7 +60,9 @@ class LAZYSUITE_PT_panelA(bpy.types.Panel):
         row = layout.row()
         row.label(text="Parents:")
         row = layout.row()
-        row.operator("lazysuite.makesingle", icon='HEART')
+        row.operator("lazysuite.makesingle", icon='ORPHAN_DATA')
+        row = layout.row()
+        row.operator("lazysuite.clearparents", icon='GHOST_DISABLED')
         row = layout.row()
         
 class LAZYSUITE_PT_panelB(bpy.types.Panel):
@@ -90,6 +92,10 @@ class LAZYSUITE_PT_panelB(bpy.types.Panel):
         row = layout.row()
         row.operator("lazysuite.addmodifier_shrinkwrap", icon='MOD_SHRINKWRAP')
         row = layout.row()
+        sub = row.row()
+        sub.scale_x = 0.75
+        sub.prop(context.scene, 'prepsculpt_remesh')
+        row.operator("lazysuite.prepsculpt", icon='SCULPTMODE_HLT')
         
 class LAZYSUITE_PT_panelC(bpy.types.Panel):
     
@@ -232,6 +238,15 @@ class LAZYSUITE_OT_makesingle(bpy.types.Operator):
         bpy.ops.object.make_single_user(object=True, obdata=True, material=False, animation=False, obdata_animation=False)
 
         return {'FINISHED'}
+
+class LAZYSUITE_OT_clearparents(bpy.types.Operator):
+    
+    bl_label = "Clear parents (Keep T.)"
+    bl_idname = "lazysuite.clearparents"
+    bl_description = "Break the bonds between the selected objects and their parents, keeping transforms."
+    def execute(self, context):
+        bpy.ops.object.parent_clear(type='CLEAR_KEEP_TRANSFORM')
+        return {'FINISHED'}
     
 # --------------------------------------------------------------------------------
 
@@ -289,6 +304,22 @@ class LAZYSUITE_OT_addmodifier_shrinkwrap(bpy.types.Operator):
         bpy.context.object.modifiers["Displace"].show_in_editmode = True
         return {'FINISHED'}
 
+class LAZYSUITE_OT_prepsculpt(bpy.types.Operator):
+    
+    bl_label = "Autoremesh"
+    bl_idname = "lazysuite.prepsculpt"
+    bl_description = "Apply transforms, origin, and modifiers, join objects then add a remesh modifier with a given amount. REMESH MODIFIER NOT APPLIED"
+    def execute(self, context):
+        scene = context.scene
+        sel_obj = bpy.context.selected_objects
+        for i, val in enumerate(sel_obj):
+            bpy.ops.object.convert(target='MESH')
+            bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+        bpy.ops.object.join()
+        bpy.ops.object.modifier_add(type='REMESH')
+        bpy.context.object.modifiers["Remesh"].voxel_size = scene.prepsculpt_remesh
+
+        return {'FINISHED'}
     
 # --------------------------------------------------------------------------------
 
@@ -474,7 +505,9 @@ class LAZYSUITE_OT_applyname_bool(bpy.types.Operator):
     
 # -------------------------------------------------------------------------------------
     
-classes = [LAZYSUITE_PT_main_panel, LAZYSUITE_PT_panelA, LAZYSUITE_PT_panelB, LAZYSUITE_PT_panelC, LAZYSUITE_PT_panelD, LAZYSUITE_OT_applyrotation_rig, LAZYSUITE_OT_applytransform, LAZYSUITE_OT_cleartransform, LAZYSUITE_OT_fixnormals, LAZYSUITE_OT_origintoselect, LAZYSUITE_OT_makesingle, LAZYSUITE_OT_createempty, LAZYSUITE_OT_createsuzanne, LAZYSUITE_OT_addmodifier_mirror, LAZYSUITE_OT_addmodifier_bevel, LAZYSUITE_OT_addmodifier_shrinkwrap, LAZYSUITE_OT_addchecker_512, LAZYSUITE_OT_addchecker_1024, LAZYSUITE_OT_addchecker_2048, LAZYSUITE_OT_addchecker_4096, LAZYSUITE_OT_applyname_geo, LAZYSUITE_OT_applyname_rig, LAZYSUITE_OT_applyname_empty, LAZYSUITE_OT_applyname_curve, LAZYSUITE_OT_applyname_bool]
+classes = [LAZYSUITE_PT_main_panel, LAZYSUITE_PT_panelA, LAZYSUITE_PT_panelB, LAZYSUITE_PT_panelC, LAZYSUITE_PT_panelD, LAZYSUITE_OT_applyrotation_rig, LAZYSUITE_OT_applytransform, LAZYSUITE_OT_cleartransform, LAZYSUITE_OT_fixnormals, LAZYSUITE_OT_origintoselect, LAZYSUITE_OT_makesingle,
+LAZYSUITE_OT_clearparents, LAZYSUITE_OT_createempty, LAZYSUITE_OT_createsuzanne, LAZYSUITE_OT_addmodifier_mirror, LAZYSUITE_OT_addmodifier_bevel, LAZYSUITE_OT_addmodifier_shrinkwrap,
+LAZYSUITE_OT_prepsculpt, LAZYSUITE_OT_addchecker_512, LAZYSUITE_OT_addchecker_1024, LAZYSUITE_OT_addchecker_2048, LAZYSUITE_OT_addchecker_4096, LAZYSUITE_OT_applyname_geo, LAZYSUITE_OT_applyname_rig, LAZYSUITE_OT_applyname_empty, LAZYSUITE_OT_applyname_curve, LAZYSUITE_OT_applyname_bool]
 
 def register():
     for cls in classes:
@@ -484,6 +517,7 @@ def register():
     bpy.types.Scene.newName_empty = bpy.props.StringProperty(name='', default="EMPT_")
     bpy.types.Scene.newName_curve = bpy.props.StringProperty(name='', default="CURV_")
     bpy.types.Scene.newName_bool = bpy.props.StringProperty(name='', default="BOOL_")
+    bpy.types.Scene.prepsculpt_remesh = bpy.props.FloatProperty(name='', default= 0.01, min = 0.0001, max = 0.5)
 
 def unregister():
     for cls in classes:
