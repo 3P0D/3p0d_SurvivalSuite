@@ -38,5 +38,5 @@ install the python file directly in the addon menu.
 - RIG_  
 - EMPT_  
 - CURV_
-- BOOL_
+- BOOL_  
 you can now customise your naming convention. those are default value.
